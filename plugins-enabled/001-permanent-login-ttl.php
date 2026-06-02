@@ -5,6 +5,7 @@ class AdminerPermanentLoginTtl extends Adminer\Plugin
 	public function __construct(private int $ttlSeconds)
 	{
 		if (!function_exists('header_register_callback')) {
+			error_log('AdminerPermanentLoginTtl is disabled: header_register_callback is not available.');
 			return;
 		}
 
@@ -37,4 +38,5 @@ class AdminerPermanentLoginTtl extends Adminer\Plugin
 	}
 }
 
+// 365 days.
 return new AdminerPermanentLoginTtl(31536000);

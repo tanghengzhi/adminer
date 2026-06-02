@@ -14,8 +14,10 @@ $servers = array(
 
 $rawConfiguredServers = getenv('ADMINER_LOGIN_SERVERS') ?: '[]';
 $configuredServers = json_decode($rawConfiguredServers, true);
-if ($configuredServers === null && json_last_error() !== JSON_ERROR_NONE) {
+if (json_last_error() !== JSON_ERROR_NONE) {
 	error_log('Invalid ADMINER_LOGIN_SERVERS JSON: ' . json_last_error_msg());
+	$configuredServers = array();
+} elseif ($configuredServers === null) {
 	$configuredServers = array();
 }
 if (is_array($configuredServers)) {

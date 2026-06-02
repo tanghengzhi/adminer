@@ -25,13 +25,19 @@ if ($rawConfiguredServers === false || trim($rawConfiguredServers) === '') {
 	}
 }
 
-foreach ($configuredServers as $server) {
+foreach ($configuredServers as $index => $server) {
 	if (!is_array($server)) {
+		error_log("Skip ADMINER_LOGIN_SERVERS[$index]: item must be an object.");
 		continue;
 	}
 	$name = trim((string) ($server['name'] ?? ''));
 	$serverAddress = trim((string) ($server['server'] ?? ''));
 	if ($name === '' || $serverAddress === '') {
+		error_log("Skip ADMINER_LOGIN_SERVERS[$index]: 'name' and 'server' are required.");
+		continue;
+	}
+	if (isset($servers[$name])) {
+		error_log("Skip ADMINER_LOGIN_SERVERS[$index]: duplicate name '$name'.");
 		continue;
 	}
 	$servers[$name] = array(

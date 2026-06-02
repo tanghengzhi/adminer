@@ -24,5 +24,11 @@ sudo docker compose pull
 另外，`permanentLogin()` 的密钥改为通过环境变量 `ADMINER_PERMANENT_LOGIN_SECRET` 配置。请在 `.env` 中设置该值后再启动：
 
 ```bash
-ADMINER_PERMANENT_LOGIN_SECRET=请替换为高强度随机密钥
+ADMINER_PERMANENT_LOGIN_SECRET=your-secret-key-here-min-32-bytes
+```
+
+可使用以下命令生成：
+
+```bash
+openssl rand -base64 32
 ```

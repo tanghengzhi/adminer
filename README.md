@@ -26,7 +26,7 @@ sudo docker compose pull
 
 ```yaml
 environment:
-  - ADMINER_LOGIN_SERVERS=[{"name":"开发库","server":"mysql-dev:3306","driver":"server"},{"name":"测试库","server":"mysql-test:3306","driver":"server"}]
+  - ADMINER_LOGIN_SERVERS=[{"name":"开发库","server":"mysql-dev:3306"},{"name":"测试库","server":"mysql-test:3306","driver":"pgsql"}]
 ```
 
 2. 重启容器：

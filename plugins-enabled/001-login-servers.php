@@ -30,12 +30,12 @@ foreach ($configuredServers as $server) {
 		continue;
 	}
 	$name = trim((string) ($server['name'] ?? ''));
-	$host = trim((string) ($server['server'] ?? ''));
-	if ($name === '' || $host === '') {
+	$serverAddress = trim((string) ($server['server'] ?? ''));
+	if ($name === '' || $serverAddress === '') {
 		continue;
 	}
 	$servers[$name] = array(
-		'server' => $host,
+		'server' => $serverAddress,
 		'driver' => trim((string) ($server['driver'] ?? '')) ?: $defaultDriver,
 	);
 }

@@ -9,6 +9,7 @@ services:
       - ADMINER_DEFAULT_SERVER= # Optional: Specify default database server (e.g., db for MySQL service)
       - ADMINER_PLUGINS=dark-switcher
       - ADMINER_DESIGN= # Optional: Set a theme for Adminer
+      - ADMINER_PERMANENT_LOGIN_SECRET=${ADMINER_PERMANENT_LOGIN_SECRET:?Set ADMINER_PERMANENT_LOGIN_SECRET in .env}
     volumes:
       - ./plugins-enabled/001-permanent-login-ttl.php:/var/www/html/plugins-enabled/001-permanent-login-ttl.php:ro
       - ./plugins-enabled/002-permanent-login-secret.php:/var/www/html/plugins-enabled/002-permanent-login-secret.php:ro

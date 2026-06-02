@@ -11,6 +11,7 @@ services:
       - ADMINER_DESIGN= # Optional: Set a theme for Adminer
     volumes:
       - ./plugins-enabled/001-permanent-login-ttl.php:/var/www/html/plugins-enabled/001-permanent-login-ttl.php:ro
+      - ./plugins-enabled/002-permanent-login-secret.php:/var/www/html/plugins-enabled/002-permanent-login-secret.php:ro
     networks:
       - adminer-network
 

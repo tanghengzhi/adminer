@@ -5,12 +5,7 @@ require_once '/var/www/html/plugins/login-servers.php';
 // Adminer plugin uses "server" as MySQL driver identifier.
 $defaultDriver = 'server';
 $defaultServer = getenv('ADMINER_DEFAULT_SERVER') ?: 'db';
-$servers = array(
-	'Default' => array(
-		'server' => $defaultServer,
-		'driver' => $defaultDriver,
-	),
-);
+$servers = array();
 
 $rawConfiguredServers = getenv('ADMINER_LOGIN_SERVERS');
 if ($rawConfiguredServers === false || trim($rawConfiguredServers) === '') {
@@ -27,7 +22,7 @@ if ($rawConfiguredServers === false || trim($rawConfiguredServers) === '') {
 
 foreach ($configuredServers as $index => $server) {
 	if (!is_array($server)) {
-		error_log("Skip ADMINER_LOGIN_SERVERS[$index]: item must decode to an array.");
+		error_log("Skip ADMINER_LOGIN_SERVERS[$index]: each item must be an object like {\"name\":\"...\",\"server\":\"...\"}.");
 		continue;
 	}
 	$name = trim((string) ($server['name'] ?? ''));
@@ -45,5 +40,14 @@ foreach ($configuredServers as $index => $server) {
 		'driver' => trim((string) ($server['driver'] ?? '')) ?: $defaultDriver,
 	);
 }
+
+$defaultLabel = 'Default';
+while (isset($servers[$defaultLabel])) {
+	$defaultLabel .= ' (auto)';
+}
+$servers[$defaultLabel] = array(
+	'server' => $defaultServer,
+	'driver' => $defaultDriver,
+);
 
 return new AdminerLoginServers($servers);

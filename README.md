@@ -18,21 +18,6 @@ sudo docker compose down
 sudo docker compose pull
 ```
 
-## 账号管理（信任设备）
+## 保持登录有效期
 
-通过 `login-servers` 插件在登录页展示常用连接（服务器）下拉列表，并配合浏览器“永久登录”实现信任设备记忆连接信息。
-
-1. 在 `docker-compose.yml` 中配置 `ADMINER_LOGIN_SERVERS`（JSON 数组）：
-
-```yaml
-environment:
-  - ADMINER_LOGIN_SERVERS=[{"name":"开发库","server":"mysql-dev:3306"},{"name":"PostgreSQL 测试库","server":"postgres-test:5432","driver":"pgsql"}]
-```
-
-2. 重启容器：
-
-```bash
-sudo docker compose up -d
-```
-
-3. 在 Adminer 登录页选择常用服务器，并在信任设备上勾选“永久登录（Permanent login）”。
+已将 Adminer 登录页“永久登录（Permanent login）”对应的 `adminer_permanent` Cookie 有效期从 1 个月调整为 1 年（365 天），不修改现有登录页面结构。

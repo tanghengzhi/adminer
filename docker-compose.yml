@@ -9,9 +9,8 @@ services:
       - ADMINER_DEFAULT_SERVER= # Optional: Specify default database server (e.g., db for MySQL service)
       - ADMINER_PLUGINS=dark-switcher
       - ADMINER_DESIGN= # Optional: Set a theme for Adminer
-      - ADMINER_LOGIN_SERVERS=[] # Optional: JSON array like [{"name":"dev","server":"db:3306","driver":"server"}] ("server" = MySQL)
     volumes:
-      - ./plugins-enabled/001-login-servers.php:/var/www/html/plugins-enabled/001-login-servers.php:ro
+      - ./plugins-enabled/001-permanent-login-ttl.php:/var/www/html/plugins-enabled/001-permanent-login-ttl.php:ro
     networks:
       - adminer-network
 

@@ -27,7 +27,7 @@ if ($rawConfiguredServers === false || trim($rawConfiguredServers) === '') {
 
 foreach ($configuredServers as $index => $server) {
 	if (!is_array($server)) {
-		error_log("Skip ADMINER_LOGIN_SERVERS[$index]: item must be an object.");
+		error_log("Skip ADMINER_LOGIN_SERVERS[$index]: item must decode to an array.");
 		continue;
 	}
 	$name = trim((string) ($server['name'] ?? ''));

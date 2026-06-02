@@ -2,8 +2,15 @@
 
 class AdminerPermanentLoginTtl extends Adminer\Plugin
 {
-	public function __construct(private int $ttlSeconds)
+	private const SECONDS_PER_YEAR = 365 * 24 * 60 * 60;
+
+	public function __construct(private bool $enabled, private int $ttlSeconds = self::SECONDS_PER_YEAR)
 	{
+		if (!$this->enabled) {
+			error_log('AdminerPermanentLoginTtl is disabled: header_register_callback is not available.');
+			return;
+		}
+
 		header_register_callback(function (): void {
 			$headers = headers_list();
 			$setCookieHeaders = [];
@@ -24,8 +31,17 @@ class AdminerPermanentLoginTtl extends Adminer\Plugin
 
 			foreach ($setCookieHeaders as $cookie) {
 				if (stripos($cookie, 'adminer_permanent=') === 0) {
-					$cookie = preg_replace('/;\s*expires=[^;]*/i', '', $cookie);
-					$cookie .= '; expires=' . $expires;
+					$parts = array_map('trim', explode(';', $cookie));
+					$nameValue = array_shift($parts);
+					$attributes = [];
+					foreach ($parts as $attribute) {
+						if (stripos($attribute, 'expires=') === 0) {
+							continue;
+						}
+						$attributes[] = $attribute;
+					}
+					$attributes[] = 'expires=' . $expires;
+					$cookie = $nameValue . '; ' . implode('; ', $attributes);
 				}
 				header('Set-Cookie: ' . $cookie, false);
 			}
@@ -33,10 +49,4 @@ class AdminerPermanentLoginTtl extends Adminer\Plugin
 	}
 }
 
-if (!function_exists('header_register_callback')) {
-	error_log('AdminerPermanentLoginTtl is disabled: header_register_callback is not available.');
-	return new class extends Adminer\Plugin {
-	};
-}
-
-return new AdminerPermanentLoginTtl(365 * 24 * 60 * 60);
+return new AdminerPermanentLoginTtl(function_exists('header_register_callback'));

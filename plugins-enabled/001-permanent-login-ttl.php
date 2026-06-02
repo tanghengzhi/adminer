@@ -4,14 +4,9 @@ class AdminerPermanentLoginTtl extends Adminer\Plugin
 {
 	public function __construct(private int $ttlSeconds)
 	{
-		if (!function_exists('header_register_callback')) {
-			error_log('AdminerPermanentLoginTtl is disabled: header_register_callback is not available.');
-			return;
-		}
-
 		header_register_callback(function (): void {
 			$headers = headers_list();
-			$setCookieHeaders = array();
+			$setCookieHeaders = [];
 
 			foreach ($headers as $header) {
 				if (stripos($header, 'Set-Cookie:') !== 0) {
@@ -20,7 +15,7 @@ class AdminerPermanentLoginTtl extends Adminer\Plugin
 				$setCookieHeaders[] = trim(substr($header, strlen('Set-Cookie:')));
 			}
 
-			if ($setCookieHeaders === array()) {
+			if ($setCookieHeaders === []) {
 				return;
 			}
 
@@ -38,5 +33,10 @@ class AdminerPermanentLoginTtl extends Adminer\Plugin
 	}
 }
 
-// 365 days.
-return new AdminerPermanentLoginTtl(31536000);
+if (!function_exists('header_register_callback')) {
+	error_log('AdminerPermanentLoginTtl is disabled: header_register_callback is not available.');
+	return new class extends Adminer\Plugin {
+	};
+}
+
+return new AdminerPermanentLoginTtl(365 * 24 * 60 * 60);
